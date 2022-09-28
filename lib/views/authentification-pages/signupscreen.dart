@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:silma_connect/constant.dart';
 import 'package:silma_connect/views/authentification-pages/checkingcodescreen.dart';
 import 'package:silma_connect/views/authentification-pages/widgets/googleConnect.dart';
 import 'package:silma_connect/views/authentification-pages/widgets/rounded-button.dart';
 import 'package:silma_connect/views/authentification-pages/widgets/text-field-input.dart';
+import 'package:intl_phone_field/intl_phone_field.dart';
 
 class SignupScreen extends StatefulWidget {
   const SignupScreen({Key? key}) : super(key: key);
@@ -15,19 +17,59 @@ class SignupScreen extends StatefulWidget {
 
 class _SignupScreenState extends State<SignupScreen> {
   bool politicsIsOk = false;
+  bool inLoginProcess = false;
   bool emailIsValid = false;
+  bool phoneNumberIsValid = false;
   bool startMailEdit = false;
+  bool startPhoneNumberEdit = false;
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _phoneNumberController = TextEditingController();
 
   void initState() {
     super.initState();
     _emailController.addListener(_checkEmail);
+    _phoneNumberController.addListener(_checkPhoneNumber);
+  }
+
+  Future<void> register(
+      String country, String email, String phoneNumber) async {
+    setState(() {
+      inLoginProcess = true;
+    });
+    await Future.delayed(Duration(seconds: 5));
+    setState(() {
+      inLoginProcess = false;
+    });
+    Navigator.push(
+        context,
+        PageTransition(
+            alignment: Alignment.center,
+            duration: Duration(milliseconds: 500),
+            reverseDuration: Duration(milliseconds: 500),
+            type: PageTransitionType.fade,
+            child: CheckingCodeScreen(),
+            childCurrent: SignupScreen()));
   }
 
   _checkEmail() {
     bool emailValid = RegExp(
             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
         .hasMatch(_emailController.text);
+
+    if (emailValid)
+      setState(() {
+        emailIsValid = true;
+      });
+    else {
+      setState(() {
+        emailIsValid = false;
+      });
+    }
+  }
+
+  _checkPhoneNumber() {
+    bool emailValid =
+        RegExp(r"^(?:[+0]9)?[0-9]{10}$").hasMatch(_emailController.text);
 
     if (emailValid)
       setState(() {
@@ -66,7 +108,7 @@ class _SignupScreenState extends State<SignupScreen> {
                         "Enregistrement",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                            fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                     ),
                     SizedBox(
@@ -75,6 +117,39 @@ class _SignupScreenState extends State<SignupScreen> {
                     TextInputWithIcon(
                       icon: Icons.arrow_drop_down,
                       hint: "Burkina Faso",
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.02,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Container(
+                        height: height(context) * 0.08,
+                        width: width(context) * 0.8,
+                        padding: EdgeInsets.symmetric(horizontal: 20),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFf6f7fb),
+                          border: Border.all(color: Color(0xFFcbcbcb)),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Center(
+                          child: TextField(
+                            controller: _phoneNumberController,
+                            keyboardType: TextInputType.phone,
+                            onChanged: (value) {
+                              setState(() {
+                                startPhoneNumberEdit = true;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Numéro de téléphone",
+                              hintStyle: kBodyText,
+                            ),
+                            style: kBodyText,
+                          ),
+                        ),
+                      ),
                     ),
                     SizedBox(
                       height: height(context) * 0.02,
@@ -169,37 +244,44 @@ class _SignupScreenState extends State<SignupScreen> {
                       height: height(context) * 0.03,
                     ),
                     InkWell(
-                        onTap: () {
-                          if (emailIsValid && politicsIsOk) {
-                            Navigator.push(
-                                context,
-                                PageTransition(
-                                    type: PageTransitionType.leftToRight,
-                                 duration: Duration(milliseconds:500),
-                      reverseDuration: Duration(milliseconds: 500),
-                                    child: CheckingCodeScreen(),
-                                    childCurrent: CheckingCodeScreen()));
-                          }
-                        },
-                        child: Container(
+                      onTap: () {
+                        if (emailIsValid && politicsIsOk) {
+                          register("Burkina Faso", _emailController.text,
+                              _phoneNumberController.text);
+                        }
+                      },
+                      child: Container(
                           width: width(context) * 0.8,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(16),
-                            color: (emailIsValid && politicsIsOk)
-                                ? Colors.blue
-                                : Color(0xFFd3e5fd),
+                            color: inLoginProcess
+                                ? Color(0xFFd3e5fd)
+                                : (emailIsValid && politicsIsOk)
+                                    ? Colors.blue
+                                    : Color(0xFFd3e5fd),
                           ),
-                          child: TextButton(
-                            onPressed: null,
-                            child: Text(
-                              "Obtenir le code de vérification",
-                              style: TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 20),
-                            ),
-                          ),
-                        )),
+                          child: Center(
+                            child: Stack(
+                                alignment: AlignmentDirectional.center,
+                                children: [
+                                  TextButton(
+                                    onPressed: null,
+                                    child: Text(
+                                      "Obtenir le code de vérification",
+                                      style: TextStyle(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 20),
+                                    ),
+                                  ),
+                                  if (inLoginProcess)
+                                    SpinKitCircle(
+                                      color: Colors.blue,
+                                      size: 50.0,
+                                    )
+                                ]),
+                          )),
+                    ),
                     SizedBox(
                       height: height(context) * 0.03,
                     ),

@@ -13,7 +13,7 @@ Color secondaryColor = Color(0xFFec3655);
 
 Color threeColor = Color.fromARGB(255, 255, 170, 170);
 const TextStyle kBodyText =
-    TextStyle(fontSize: 22, color: Colors.black, height: 1.5);
+    TextStyle(fontSize: 19, color: Colors.black, height: 1.5);
 
 InkWell backbtn(BuildContext context) {
   return InkWell(

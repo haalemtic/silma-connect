@@ -1,10 +1,13 @@
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
+import 'package:silma_connect/views/apppages/createSceneScreen.dart';
 import 'package:silma_connect/views/apppages/homescreen.dart';
+import 'package:silma_connect/views/apppages/navigationMananger.dart';
 import 'package:silma_connect/views/apppages/roomview.dart';
 import 'package:silma_connect/views/authentification-pages/checkingcodescreen.dart';
 
 import 'package:silma_connect/views/authentification-pages/firstscreen.dart';
+import 'package:silma_connect/views/authentification-pages/politicsDialog.dart';
 
 void main() {
   runApp(SilmaConnectApp());
@@ -25,4 +28,6 @@ class SilmaConnectApp extends StatelessWidget {
       home: FirstScreen(),
     );
   }
+
+
 }

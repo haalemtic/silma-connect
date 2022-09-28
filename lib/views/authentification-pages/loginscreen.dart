@@ -3,6 +3,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:silma_connect/constant.dart';
 import 'package:silma_connect/views/apppages/homescreen.dart';
+import 'package:silma_connect/views/apppages/navigationMananger.dart';
 import 'package:silma_connect/views/authentification-pages/forgetpasswordscreen.dart';
 import 'package:silma_connect/views/authentification-pages/widgets/googleConnect.dart';
 
@@ -79,7 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
         duration: Duration(milliseconds:500),
                       reverseDuration: Duration(milliseconds: 500),
             type: PageTransitionType.fade,
-            child: Homescreen(),
+            child: PrincipalScreen(),
             childCurrent: LoginScreen()));
   }
 
@@ -109,19 +110,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         "Connectez-vous",
                         textAlign: TextAlign.start,
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, fontSize: 30),
+                            fontWeight: FontWeight.bold, fontSize: 25),
                       ),
                     ),
                     SizedBox(
                       height: height(context) * 0.02,
                     ),
-                    TextInputWithIcon(
-                      icon: Icons.arrow_drop_down,
-                      hint: "Burkina Faso",
-                    ),
-                    SizedBox(
-                      height: height(context) * 0.02,
-                    ),
+                    
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -343,7 +338,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           style: TextStyle(
                               color: Colors.blue,
                               fontWeight: FontWeight.bold,
-                              fontSize: 20),
+                              fontSize: 17),
                         )),
                     SizedBox(
                       height: height(context) * 0.03,
