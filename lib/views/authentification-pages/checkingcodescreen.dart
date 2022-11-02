@@ -6,7 +6,8 @@ import 'package:silma_connect/views/authentification-pages/widgets/rounded-butto
 import 'package:silma_connect/views/authentification-pages/widgets/text-field-input.dart';
 
 class CheckingCodeScreen extends StatefulWidget {
-  const CheckingCodeScreen({Key? key}) : super(key: key);
+  final String email;
+  const CheckingCodeScreen({Key? key, required this.email}) : super(key: key);
 
   @override
   State<CheckingCodeScreen> createState() => _CheckingCodeScreenState();
@@ -94,11 +95,12 @@ class _CheckingCodeScreenState extends State<CheckingCodeScreen> {
                               overflow: TextOverflow.clip,
                               text: TextSpan(
                                   text:
-                                      "Le code de vérification a été envoyé à votre adresse email: email@example.com ",
+                                      "Le code de vérification a été envoyé à votre adresse email: " +
+                                          widget.email.toString(),
                                   children: [
                                     TextSpan(
                                         text:
-                                            "Renvoyer ${time == 0 ? "" : "(${time} s)"}",
+                                            " Renvoyer ${time == 0 ? "" : "(${time} s)"}",
                                         style: TextStyle(
                                             color: Color(0xFF8eccff))),
                                   ],

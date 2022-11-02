@@ -77,10 +77,14 @@ class _LoginScreenState extends State<LoginScreen> {
         context,
         PageTransition(
             alignment: Alignment.center,
-        duration: Duration(milliseconds:500),
-                      reverseDuration: Duration(milliseconds: 500),
+            duration: Duration(milliseconds: 500),
+            reverseDuration: Duration(milliseconds: 500),
             type: PageTransitionType.fade,
-            child: PrincipalScreen(),
+            child: PrincipalScreen(
+              isTry: false,
+              email: _emailController.text,
+              password: _passwordController.text,
+            ),
             childCurrent: LoginScreen()));
   }
 
@@ -116,7 +120,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     SizedBox(
                       height: height(context) * 0.02,
                     ),
-                    
                     Padding(
                       padding: const EdgeInsets.symmetric(vertical: 10.0),
                       child: Container(
@@ -327,8 +330,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               context,
                               PageTransition(
                                   type: PageTransitionType.leftToRight,
-                                  duration: Duration(milliseconds:500),
-                      reverseDuration: Duration(milliseconds: 500),
+                                  duration: Duration(milliseconds: 500),
+                                  reverseDuration: Duration(milliseconds: 500),
                                   child: ForgetPasswordScreen(),
                                   childCurrent: LoginScreen()));
                         },

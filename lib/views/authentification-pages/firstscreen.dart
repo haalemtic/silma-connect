@@ -131,7 +131,10 @@ class _TryContinueModalState extends State<TryContinueModal> {
             duration: Duration(milliseconds: 500),
             reverseDuration: Duration(milliseconds: 500),
             type: PageTransitionType.fade,
-            child: PrincipalScreen(),
+            child: PrincipalScreen(
+              
+              isTry: true,
+            ),
             childCurrent: LoginScreen()));
   }
 

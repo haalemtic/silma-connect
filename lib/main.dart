@@ -1,16 +1,21 @@
+import 'package:firebase_core/firebase_core.dart';
 import "package:flutter/material.dart";
 import 'package:google_fonts/google_fonts.dart';
-import 'package:silma_connect/views/apppages/createSceneScreen.dart';
-import 'package:silma_connect/views/apppages/homescreen.dart';
-import 'package:silma_connect/views/apppages/navigationMananger.dart';
-import 'package:silma_connect/views/apppages/roomview.dart';
-import 'package:silma_connect/views/authentification-pages/checkingcodescreen.dart';
+import 'package:provider/provider.dart';
+import 'package:silma_connect/views/authentification-pages/wrapper.dart';
+import 'package:silma_connect/views/services/authentication.dart';
 
-import 'package:silma_connect/views/authentification-pages/firstscreen.dart';
-import 'package:silma_connect/views/authentification-pages/politicsDialog.dart';
 
-void main() {
-  runApp(SilmaConnectApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MultiProvider(
+    providers: [
+      StreamProvider.value(initialData: null, value: AuthService().user),
+
+    ],
+    child: SilmaConnectApp(),
+  ));
 }
 
 class SilmaConnectApp extends StatelessWidget {
@@ -25,9 +30,7 @@ class SilmaConnectApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: FirstScreen(),
+      home: Wrapper(),
     );
   }
-
-
 }

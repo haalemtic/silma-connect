@@ -138,7 +138,7 @@ class _ForgetPasswordScreenState extends State<ForgetPasswordScreen> {
                                     duration: Duration(milliseconds: 500),
                                     reverseDuration:
                                         Duration(milliseconds: 500),
-                                    child: CheckingCodeScreen(),
+                                    child: CheckingCodeScreen(email:_emailController.text),
                                     childCurrent: ForgetPasswordScreen()));
                           }
                         },

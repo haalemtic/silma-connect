@@ -5,9 +5,8 @@ import 'package:silma_connect/views/apppages/homescreen.dart';
 import 'package:silma_connect/views/apppages/roomview.dart';
 
 class RoomBlock extends StatefulWidget {
-  const RoomBlock({
-    Key? key,
-  }) : super(key: key);
+  final bool isTry;
+  const RoomBlock({Key? key, required this.isTry}) : super(key: key);
 
   @override
   State<RoomBlock> createState() => _RoomBlockState();
@@ -25,6 +24,7 @@ class _RoomBlockState extends State<RoomBlock> {
             itemCount: 5,
             itemBuilder: (context, index) {
               return RoomItem(
+                isTry: widget.isTry,
                 name: "Pièce",
                 logo: "assets/images/avatar.png",
               );
@@ -35,7 +35,9 @@ class _RoomBlockState extends State<RoomBlock> {
 class RoomItem extends StatefulWidget {
   final String name;
   final String logo;
-  const RoomItem({Key? key, required this.name, required this.logo})
+  final bool isTry;
+  const RoomItem(
+      {Key? key, required this.name, required this.logo, required this.isTry})
       : super(key: key);
 
   @override
@@ -55,7 +57,7 @@ class _RoomItemState extends State<RoomItem> {
                 reverseDuration: Duration(seconds: 1),
                 type: PageTransitionType.theme,
                 child: RoomView(),
-                childCurrent: Homescreen()));
+                childCurrent: Homescreen(isTry: widget.isTry,)));
       },
       child: Container(
         width: 185,

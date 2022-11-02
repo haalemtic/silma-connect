@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:silma_connect/constant.dart';
+import 'package:silma_connect/views/apppages/addDeviceScreen.dart';
 
 class RoomView extends StatefulWidget {
   const RoomView({Key? key}) : super(key: key);
@@ -21,7 +24,7 @@ class _RoomViewState extends State<RoomView> {
   addNewDevice() {
     showMenu(
       context: context,
-      position: RelativeRect.fromLTRB(500, height(context) * 0.65, 5,
+      position: RelativeRect.fromLTRB(500, height(context) * 0.55, 5,
           20), //here you can specify the location,
       items: [
         PopupMenuItem(
@@ -37,6 +40,14 @@ class _RoomViewState extends State<RoomView> {
       ],
     ).then((value) {
       if (value == 0) {
+        Navigator.push(
+            context,
+            PageTransition(
+                duration: Duration(milliseconds: 500),
+                reverseDuration: Duration(milliseconds: 500),
+                type: PageTransitionType.bottomToTop,
+                child: AddManuallyDeviceScreen(),
+                childCurrent: RoomView()));
       } else if (value == 1) {
         scanNearDevices();
       } else
@@ -190,7 +201,7 @@ class _RoomViewState extends State<RoomView> {
             ),
             Container(
               margin: EdgeInsets.symmetric(horizontal: width(context) * 0.03),
-              height: height(context) * 0.23,
+              height: height(context) * 0.05,
               width: double.infinity,
             ),
             Expanded(
@@ -231,70 +242,173 @@ class _RoomViewState extends State<RoomView> {
                           ]),
                     ),
                     Container(
-                      height: 125,
-                      child: InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 170,
-                          decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(25)),
-                          child: Container(
-                              margin: EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 10),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                      
+                        height: height(context)*0.4,
+                        child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            physics: BouncingScrollPhysics(),
+                            itemCount: 5,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: width(context) * 0.04,
+                                        vertical: height(context) * 0.01),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Icon(
-                                          Icons.lightbulb,
-                                          color: Colors.blue,
+                                        RoomDeviceItem(
+                                          deviceName: "Ampoule",
+                                          logo: Icons.lightbulb,
+                                          state: true,
                                         ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "Ampoule",
-                                          style: TextStyle(
-                                              color: Colors.blue,
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 16),
-                                        ),
-                                        SizedBox(
-                                          height: 10,
-                                        ),
-                                        Text(
-                                          "80 %",
-                                          style: TextStyle(
-                                              color:
-                                                  Colors.blue.withOpacity(0.5),
-                                              fontWeight: FontWeight.bold,
-                                              fontSize: 14),
+                                        RoomDeviceItem(
+                                          deviceName: "AC",
+                                          logo: Icons.ac_unit,
+                                          state: false,
                                         )
-                                      ]),
-                                  Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      ],
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.symmetric(
+                                        horizontal: width(context) * 0.04,
+                                        vertical: height(context) * 0.01),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
                                       children: [
-                                        Icon(
-                                          Icons.point_of_sale,
-                                          color: Colors.green,
-                                        )
-                                      ]),
+                                        RoomDeviceItem(
+                                          deviceName: "Wifi",
+                                          logo: Icons.wifi,
+                                          state: true,
+                                        ),
+                                        RoomDeviceItem(
+                                          deviceName: "Smart TV",
+                                          logo: Icons.tv,
+                                          state: false,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
-                              )),
+                              );
+                            })),
+                    Expanded(child: Container()),
+                    Container(
+                      width: width(context) * 0.91,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(16),
+                        color: Colors.blue,
+                      ),
+                      child: TextButton(
+                        onPressed: null,
+                        child: Text(
+                          "Eteindre tous les appareils",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 20),
                         ),
                       ),
+                    ),
+                    SizedBox(
+                      height: height(context) * 0.01,
                     )
                   ])),
             ))
           ]),
         ),
       )),
+    );
+  }
+}
+
+class RoomDeviceItem extends StatefulWidget {
+  final String deviceName;
+  final IconData logo;
+  final bool state;
+  const RoomDeviceItem(
+      {Key? key,
+      required this.deviceName,
+      required this.logo,
+      required this.state})
+      : super(key: key);
+
+  @override
+  State<RoomDeviceItem> createState() => _RoomDeviceItemState();
+}
+
+class _RoomDeviceItemState extends State<RoomDeviceItem> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(7),
+      height: 125,
+      child: InkWell(
+        onTap: () {},
+        child: Container(
+          width: 170,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(25)),
+          child: Container(
+              margin: EdgeInsets.symmetric(horizontal: 17, vertical: 23),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          widget.logo,
+                          color: Color.fromARGB(255, 78, 77, 77),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          widget.deviceName,
+                          style: TextStyle(
+                              color: Color.fromARGB(255, 78, 77, 77),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16),
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Text(
+                          widget.state ? "On" : "Off",
+                          style: TextStyle(
+                              color: Colors.black.withOpacity(0.3),
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14),
+                        )
+                      ]),
+                  Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          height: 10,
+                          width: 10,
+                          child: CircleAvatar(
+                            backgroundColor: widget.state
+                                ? Color.fromARGB(255, 100, 238, 105)
+                                : Colors.grey,
+                          ),
+                        )
+                      ]),
+                ],
+              )),
+        ),
+      ),
     );
   }
 }
@@ -307,10 +421,25 @@ class NearDeviceScanning extends StatefulWidget {
 }
 
 class _NearDeviceScanningState extends State<NearDeviceScanning> {
+  int time = 30;
+  void initState() {
+    super.initState();
+    scanTimeFinish();
+  }
+
+  Future<void> scanTimeFinish() async {
+    for (int i = 0; time > 0; i++) {
+      await Future.delayed(Duration(seconds: 1));
+      setState(() {
+        time = time - 1;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: height(context) * 0.5, 
+      height: height(context) * 0.5,
       width: double.infinity,
       color: Color(0xFF265ed7),
       child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -336,7 +465,114 @@ class _NearDeviceScanningState extends State<NearDeviceScanning> {
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               )),
-        )
+        ),
+        time == 0
+            ? Container(
+                margin: EdgeInsets.symmetric(
+                    horizontal: width(context) * 0.03,
+                    vertical: height(context) * 0.05),
+                padding: EdgeInsets.symmetric(
+                    horizontal: width(context) * 0.02,
+                    vertical: height(context) * 0.05),
+                decoration: BoxDecoration(
+                    color: Color(0xFFf2f2f2),
+                    borderRadius: BorderRadius.circular(10)),
+                child: Container(
+                  child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.info,
+                          size: 40,
+                          color: Color.fromARGB(255, 197, 194, 194),
+                        ),
+                        Expanded(
+                            child: Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: height(context) * 0.03),
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Aucun appareil trouvé.",
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black.withOpacity(0.6),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Text(
+                                  "Réessayez d'ajouter manuellement votre appareil",
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Colors.black.withOpacity(0.6),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 10,
+                                ),
+                                InkWell(
+                                    onTap: () {},
+                                    child: Text("Afficher l'aide",
+                                        style: TextStyle(
+                                            color: Colors.blue, fontSize: 15)))
+                              ]),
+                        )),
+                        InkWell(
+                            onTap: () {
+                              setState(() {
+                                time = 30;
+                              });
+                              scanTimeFinish();
+                            },
+                            child: Container(
+                              padding: EdgeInsets.all(1),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10),
+                                color: Colors.blue,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Color(0xFFf2f2f2),
+                                ),
+                                child: TextButton(
+                                  onPressed: null,
+                                  child: Text(
+                                    "Réessayer",
+                                    style: TextStyle(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16),
+                                  ),
+                                ),
+                              ),
+                            ))
+                      ]),
+                ),
+              )
+            : Center(
+                child: Stack(
+                children: [
+                  SpinKitRipple(
+                    size: height(context) * 0.4,
+                    duration: Duration(seconds: 5),
+                    color: Color(0xFFf2f2f2),
+                  ),
+                  SpinKitRipple(
+                    size: height(context) * 0.4,
+                    duration: Duration(seconds: 6),
+                    color: Color(0xFFf2f2f2),
+                  ),
+                  SpinKitRipple(
+                    size: height(context) * 0.4,
+                    duration: Duration(seconds: 7),
+                    color: Color(0xFFf2f2f2),
+                  )
+                ],
+              ))
       ]),
     );
   }

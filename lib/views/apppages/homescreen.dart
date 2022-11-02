@@ -1,16 +1,17 @@
-import 'package:circular_bottom_navigation/circular_bottom_navigation.dart';
-import 'package:circular_bottom_navigation/tab_item.dart';
+
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:silma_connect/constant.dart';
 import 'package:silma_connect/views/apppages/addDeviceScreen.dart';
 import 'package:silma_connect/views/apppages/createSceneScreen.dart';
+import 'package:silma_connect/views/apppages/profilScreen.dart';
 import 'package:silma_connect/views/apppages/widgets/rooms-widgets.dart';
 import 'package:silma_connect/views/apppages/widgets/scenes-widgets.dart';
-import 'package:silma_connect/views/authentification-pages/widgets/rounded-button.dart';
+
 
 class Homescreen extends StatefulWidget {
-  const Homescreen({Key? key}) : super(key: key);
+  const Homescreen({Key? key, required this.isTry}) : super(key: key);
+  final bool isTry;
 
   @override
   State<Homescreen> createState() => _HomescreenState();
@@ -21,7 +22,9 @@ class _HomescreenState extends State<Homescreen> {
   @override
   Widget build(BuildContext context) {
     return devices.length == 0
-        ? HomeScreenEmpty()
+        ? HomeScreenEmpty(
+            isTry: widget.isTry,
+          )
         : Scaffold(
             body: SingleChildScrollView(
                 physics: BouncingScrollPhysics(),
@@ -290,7 +293,10 @@ class _HomescreenState extends State<Homescreen> {
                                                             child:
                                                                 CreateSceneScreen(),
                                                             childCurrent:
-                                                                Homescreen()));
+                                                                Homescreen(
+                                                              isTry:
+                                                                  widget.isTry,
+                                                            )));
                                                   },
                                                   child: Icon(Icons.add),
                                                 )
@@ -321,7 +327,9 @@ class _HomescreenState extends State<Homescreen> {
                                         SizedBox(
                                           height: height(context) * 0.02,
                                         ),
-                                        RoomBlock()
+                                        RoomBlock(
+                                          isTry: widget.isTry,
+                                        )
                                       ])),
                             )
                           ]),
@@ -333,7 +341,13 @@ class _HomescreenState extends State<Homescreen> {
 }
 
 class HomeScreenEmpty extends StatefulWidget {
-  const HomeScreenEmpty({Key? key}) : super(key: key);
+
+  const HomeScreenEmpty(
+      {Key? key,
+      required this.isTry,
+    })
+      : super(key: key);
+  final bool isTry;
 
   @override
   State<HomeScreenEmpty> createState() => _HomeScreenEmptyState();
@@ -393,7 +407,9 @@ class _HomeScreenEmptyState extends State<HomeScreenEmpty> {
                 reverseDuration: Duration(seconds: 1),
                 type: PageTransitionType.theme,
                 child: AddDeviceScreen(),
-                childCurrent: HomeScreenEmpty()));
+                childCurrent: HomeScreenEmpty(
+                  isTry: widget.isTry,
+                )));
 
         aboutAutorizationBottomModal(context);
       } else if (value == 1) {
@@ -404,7 +420,9 @@ class _HomeScreenEmptyState extends State<HomeScreenEmpty> {
                 reverseDuration: Duration(seconds: 1),
                 type: PageTransitionType.theme,
                 child: CreateSceneScreen(),
-                childCurrent: HomeScreenEmpty()));
+                childCurrent: HomeScreenEmpty(
+                  isTry: widget.isTry,
+                )));
       } else
         () {};
     });
@@ -428,7 +446,20 @@ class _HomeScreenEmptyState extends State<HomeScreenEmpty> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           InkWell(
-                            onTap: () {},
+                            onTap: () {
+                              if (widget.isTry) {
+                                Navigator.push(
+                                    context,
+                                    PageTransition(
+                                        duration: Duration(seconds: 1),
+                                        reverseDuration: Duration(seconds: 1),
+                                        type: PageTransitionType.theme,
+                                        child: CompleteAccountInfoScreen(),
+                                        childCurrent: HomeScreenEmpty(
+                                          isTry: true,
+                                        )));
+                              } else {}
+                            },
                             child: CircleAvatar(
                                 backgroundColor:
                                     Color.fromARGB(255, 216, 216, 216),
@@ -504,7 +535,9 @@ class _HomeScreenEmptyState extends State<HomeScreenEmpty> {
                                           reverseDuration: Duration(seconds: 1),
                                           type: PageTransitionType.theme,
                                           child: AddDeviceScreen(),
-                                          childCurrent: HomeScreenEmpty()));
+                                          childCurrent: HomeScreenEmpty(
+                                            isTry: widget.isTry,
+                                          )));
 
                                   aboutAutorizationBottomModal(context);
                                 },

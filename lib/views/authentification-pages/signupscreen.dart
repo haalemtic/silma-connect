@@ -47,7 +47,7 @@ class _SignupScreenState extends State<SignupScreen> {
             duration: Duration(milliseconds: 500),
             reverseDuration: Duration(milliseconds: 500),
             type: PageTransitionType.fade,
-            child: CheckingCodeScreen(),
+            child: CheckingCodeScreen(email:_emailController.text),
             childCurrent: SignupScreen()));
   }
 

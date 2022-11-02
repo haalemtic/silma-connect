@@ -5,17 +5,23 @@ import 'package:page_transition/page_transition.dart';
 import 'package:silma_connect/constant.dart';
 import 'package:silma_connect/views/apppages/createSceneScreen.dart';
 import 'package:silma_connect/views/apppages/homescreen.dart';
+import 'package:silma_connect/views/apppages/profilScreen.dart';
 import 'package:silma_connect/views/apppages/widgets/rooms-widgets.dart';
 import 'package:silma_connect/views/apppages/widgets/scenes-widgets.dart';
 import 'package:silma_connect/views/authentification-pages/widgets/rounded-button.dart';
 
-
-
-
-
-
 class PrincipalScreen extends StatefulWidget {
-  const PrincipalScreen({Key? key}) : super(key: key);
+  const PrincipalScreen(
+      {Key? key,
+      required this.isTry,
+      this.email,
+      this.password,
+      this.phoneNumber})
+      : super(key: key);
+  final bool isTry;
+  final String? email;
+  final String? password;
+  final String? phoneNumber;
 
   @override
   State<PrincipalScreen> createState() => _PrincipalScreenState();
@@ -27,13 +33,13 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
   late CircularBottomNavigationController _navigationController;
   List<TabItem> tabItems = List.of([
     TabItem(Icons.home, "Ma Maison", Colors.blue,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 13)),
     TabItem(Icons.touch_app, "Scène", Colors.blue,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 13)),
     TabItem(Icons.flash_on_rounded, "Consommation", Colors.blue,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 13)),
     TabItem(Icons.account_circle, "Profil", Colors.blue,
-        labelStyle: TextStyle(fontWeight: FontWeight.bold)),
+        labelStyle: TextStyle(fontWeight: FontWeight.bold,fontSize: 13)),
   ]);
   void initState() {
     super.initState();
@@ -60,7 +66,9 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
     Widget page;
     switch (selectedPos) {
       case 0:
-        page = Homescreen();
+        page = Homescreen(
+          isTry: widget.isTry,
+        );
         break;
       case 1:
         page = Container();
@@ -69,7 +77,9 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
         page = Container();
         break;
       case 3:
-        page = Container();
+        page = ProfilScreen(
+          isTry: widget.isTry,
+        );
         break;
       default:
         page = Container();
@@ -78,9 +88,7 @@ class _PrincipalScreenState extends State<PrincipalScreen> {
 
     return GestureDetector(
       child: page,
-      onTap: () {
-      
-      },
+      onTap: () {},
     );
   }
 
